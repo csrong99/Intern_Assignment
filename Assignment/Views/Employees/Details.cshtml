@@ -1,0 +1,90 @@
+﻿@model Assignment.Employee
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Full_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Full_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Join_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Join_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Security_Phrase)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Security_Phrase)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Position1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Position1.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status1.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Team1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Team1.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Username }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

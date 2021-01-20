@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Assignment.Employee>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Username")
+        </th>
+        <th>
+            @Html.DisplayName("Full Name")
+        </th>
+        <th>
+            @Html.DisplayName("Join Date")
+        </th>
+        <th>
+            @Html.DisplayName("Team Name")
+        </th>
+        <th>
+            @Html.DisplayName("Position Name")
+        </th>
+        <th>
+            @Html.DisplayName("Status Name")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Full_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Join_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team1.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position1.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status1.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Username }, htmlAttributes: new { @class = "btn btn-primary", @type = "button" })
+                <button id="@item.Username" type="button" class="btn btn-danger deleteLink" data-toggle="modal" data-target="#deleteModal">
+                    Delete
+                </button>
+            </td>
+        </tr>
+    }
+
+    <!-- Button trigger modal -->
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="h5_delete">Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="deleteModalBody" class="modal-body">
+                Are you sure to delete this record?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+    $("#deleteModal").modal("hide");
+    $(".deleteLink").on("click", function () {
+        $.get('@Url.Action("GetDeletePartial")', { id: $(this).prop("id") }, function (data) {
+            $("#deleteModalBody").html(data);
+
+            $("#deleteModal").modal("show");
+        });
+    });
+
+        $("#deleteBtn").on("click", function () {
+            $("#deleteForm").submit();
+        });
+    </script>
+}
+

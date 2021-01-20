@@ -1,0 +1,98 @@
+﻿@model Assignment.Models.EmployeeLoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<!------ Include the above in your HEAD tag ---------->
+
+@Styles.Render("~/Content/login")
+
+<div class="wrapper fadeInDown align-items-center">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img src="~/Assets/images/pp.png" id="icon" alt="User Icon">
+        </div>
+
+        <!-- Login Form -->
+        @using (Ajax.BeginForm("Login", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" },
+            htmlAttributes: new { id = "loginForm", novalidate = "false" })) {
+
+            @Html.AntiForgeryToken()
+            @Html.EditorFor(model => model.Username, new {
+                htmlAttributes = new {
+                @class = "fadeIn second",
+                @placeholder = "login",
+                @id = "login",
+                @name = "login"
+                }
+            })
+            @Html.EditorFor(model => model.Password, new {
+                htmlAttributes = new {
+                @class = "fadeIn third",
+                @placeholder = "password",
+                @id = "password",
+                @name = "login"
+                }
+            })
+            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "form-group text-danger", @id = "validateUsername" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "form-group text-danger", @id = "validatePassword" })
+
+            @Html.ValidationSummary(true, "");
+
+            <input type="submit" class="fadeIn fourth" value="Log In">
+        }
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#createForm").submit(function (event) {
+                var dataString;
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                var action = $("#createForm").attr("action");
+                // Setting.
+                dataString = new FormData($("#createForm").get(0));
+                contentType = false;
+                processData = false;
+                $.ajax({
+                    type: "POST",
+                    url: action,
+                    data: dataString,
+                    dataType: "json",
+                    contentType: contentType,
+                    processData: processData,
+                    success: function (result) {
+                        // Result.
+                        onAjaxRequestSuccess(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //do your own thing
+                        alert("fail");
+                    }
+                });
+            }); //end .submit()
+        });
+        var onAjaxRequestSuccess = function (result) {
+            if (result.EnableError) {
+                // Setting.
+                alert(result.ErrorMsg);
+            } else if (result.EnableSuccess) {
+                // Setting.
+                alert(result.SuccessMsg);
+                // Resetting form.
+                $('#AjaxformId').get(0).reset();
+            }
+        }
+    </script>
+    }

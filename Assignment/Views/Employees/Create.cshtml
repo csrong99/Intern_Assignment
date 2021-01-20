@@ -1,0 +1,195 @@
+﻿@model Assignment.Models.EmployeeCreateViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create", "Employees", FormMethod.Post, htmlAttributes: new { id = "createForm", novalidate = "false" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Employee</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Username, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Username, new {
+                    htmlAttributes = new {
+                        @class = "form-control",
+                        @id = "username",
+               onfocusout = "checkUserExists()"
+           }
+                })
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger", @id = "validateUsername" })
+                <span id="userExists"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Employee_ID, "Employee ID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Employee_ID, new {
+                    htmlAttributes = new {
+                        @class = "form-control",
+                 @id = "emp_id",
+                 onfocusout = "checkIDExists()"
+           }
+                })
+                @Html.ValidationMessageFor(model => model.Employee_ID, "", new { @class = "text-danger", @id = "validateID" })
+                <span id="idExists"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Full_Name, "Full Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Full_Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Full_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("Password", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Confirm_Password, "Confirm Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Confirm_Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Confirm_Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Join_Date, "Join Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Join_Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Join_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Position, "Position", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Position", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Position, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Team, "Team", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Team", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Team, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Security_Phrase, "Security Phrase", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Security_Phrase, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Security_Phrase, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Status", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" onclick="checkUserExist()" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        function checkUserExists() {
+
+            if ($("#validateUsername").hasClass("field-validation-error")) {
+                $("#userExists").text("");
+                return null;
+            } else {
+                var username = $("#username").val();
+                $.ajax({
+                    type: "GET",
+                    url: 'IsUserAvailable',
+                    data: "id=" + username,
+                    contentType: 'json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result == "False") {
+                            $("#userExists").text("Username " + username + " is not available");
+                            $("#userExists").css('color', "red");
+                            $("#validateUsername").showErrors = "Username " + username + " is not available";
+                        } else if (result == "True") {
+                            $("#userExists").text("Username " + username + " is available");
+                            $("#userExists").css('color', "green");
+                        }
+                    },
+                    failure: function (jqXHR, textStatus, errorThrown) {
+                        console.log("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText); // Display error message
+                    }
+                })
+            }
+
+        }
+
+        function checkIDExists() {
+
+            if ($("#validateID").hasClass("field-validation-error")) {
+                $("#idExists").text("");
+                return null;
+            } else {
+                var emp_id = $("#emp_id").val();
+                $.ajax({
+                    type: "GET",
+                    url: 'IsIDExisted',
+                    data: "id=" + emp_id,
+                    contentType: 'json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result == "False") {
+                            $("#idExists").text("Employee ID " + emp_id + " is available");
+                            $("#idExists").css('color', "green");
+                        } else if (result == "True") {
+                            $("#idExists").text("Employee ID " + emp_id + " existed or invalid");
+                            $("#idExists").css('color', "red");
+                        }
+                    },
+                    failure: function (jqXHR, textStatus, errorThrown) {
+                        console.log("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText); // Display error message
+                    }
+                })
+            }
+
+        }
+    </script>
+}
