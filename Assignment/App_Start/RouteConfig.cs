@@ -12,7 +12,7 @@ namespace Assignment {
 
 			routes.MapRoute(
 				name: "Login",
-				url: "login/{id}",
+				url: "login/",
 				defaults: new { controller = "Login", action = "Index" }
 			);
 
@@ -24,9 +24,9 @@ namespace Assignment {
 
 
 			routes.MapRoute(
-				name: "EmployeeIndex",
+				name: "EmployeesIndex",
 				url: "{controller}/{action}/{id}",
-				defaults: new { controller = "Employee", action = "Index", id = UrlParameter.Optional }
+				defaults: new { controller = "Employees", action = "Index", id = UrlParameter.Optional }
 			);
 		}
 	}

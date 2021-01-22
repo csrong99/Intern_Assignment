@@ -9,18 +9,21 @@ using System.Web;
 using System.Web.Mvc;
 using Assignment;
 using Assignment.Models;
+using System.Web.Security;
 
 namespace Assignment.Views {
 	public class EmployeesController : Controller {
 		private MyCompanyEntities db = new MyCompanyEntities();
 
 		// GET: Employees
+		[Authorize]
 		public ActionResult Index() {
 			var employees = db.Employees.Include(e => e.Position1).Include(e => e.Status1).Include(e => e.Team1);
 			return View(employees.ToList());
 		}
 
 		// GET: Employees/Details/5
+		[Authorize]
 		public ActionResult Details(string id) {
 			if (id == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -33,6 +36,7 @@ namespace Assignment.Views {
 		}
 
 		// GET: Employees/Create
+		[Authorize]
 		public ActionResult Create() {
 			ViewBag.Position = new SelectList(db.Positions, "Position_ID", "Name");
 			ViewBag.Status = new SelectList(db.Status, "Status_ID", "Name");
@@ -43,6 +47,7 @@ namespace Assignment.Views {
 		// POST: Employees/Create
 		// To protect from overposting attacks, enable the specific properties you want to bind to, for 
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Create([Bind(Include = "Username,Employee_ID,Email,Full_Name,Password,Confirm_Password,Join_Date,Position,Team,Security_Phrase,Status")] EmployeeCreateViewModel emp_view) {
@@ -71,6 +76,7 @@ namespace Assignment.Views {
 		}
 
 		// GET: Employees/Edit/5
+		[Authorize]
 		public ActionResult Edit(string id) {
 			if (id == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -91,6 +97,7 @@ namespace Assignment.Views {
 		// POST: Employees/Edit/5
 		// To protect from overposting attacks, enable the specific properties you want to bind to, for 
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Edit([Bind(Include = "Username,Employee_ID,Email,Full_Name,Password,Confirm_Password,Join_Date,Position,Team,Security_Phrase,Status")] EmployeeEditViewModel emp_view) {
@@ -132,6 +139,7 @@ namespace Assignment.Views {
 		}
 
 		// GET: Employees/Delete/5
+		[Authorize]
 		public ActionResult Delete(string id) {
 			if (id == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -144,6 +152,7 @@ namespace Assignment.Views {
 		}
 
 		// POST: Employees/Delete/5
+		[Authorize]
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public ActionResult DeleteConfirmed(string id) {
@@ -153,6 +162,7 @@ namespace Assignment.Views {
 			return RedirectToAction("Index");
 		}
 		// GET : GetDeletePartial/5
+		[Authorize]
 		[HttpGet]
 		public PartialViewResult GetDeletePartial(string id) {
 			var deleteItem = db.Employees.Find(id);
@@ -190,6 +200,21 @@ namespace Assignment.Views {
 		}
 
 
+		protected override void OnActionExecuting(ActionExecutingContext filterContext) {
+			base.OnActionExecuting(filterContext);
+			System.Diagnostics.Debug.WriteLine("Executing");
+			System.Diagnostics.Debug.WriteLine("sess id: " + Session.SessionID);
+			string username = ((Log)Session["logon"]).Username;
+			if (!Session.SessionID.Equals(HttpContext.Application[username])) {
+				// set FormAuthentication
+				FormsAuthentication.SignOut();
+				filterContext.Result = new RedirectToRouteResult(
+					new System.Web.Routing.RouteValueDictionary(
+					new { controller = "Login", action = "Index", errorCode = "2" }
+					)
+				); 
+			}
+		}
 
 		protected override void Dispose(bool disposing) {
 			if (disposing) {

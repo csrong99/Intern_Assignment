@@ -26,9 +26,9 @@ namespace Assignment
         }
     
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Log> Logs { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
-        public virtual DbSet<Log> Logs { get; set; }
     }
 }

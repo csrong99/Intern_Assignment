@@ -34,10 +34,11 @@ CREATE TABLE [dbo].[Employee]
 )
 
 CREATE TABLE [dbo].[Log] (
-    [Id]           INT           NOT NULL,
+    [Id]           INT           NOT NULL IDENTITY,
     [Attempt_Time] DATETIME      NOT NULL,
-    [Username]     NVARCHAR (15) NOT NULL,
-    [Ipv4]         NCHAR (10)    NOT NULL,
+    [Username]     NVARCHAR (15) NULL,
+    [Ipv4]         NCHAR (20)    NOT NULL,
+    [successful]   BIT           NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_LogEmployee] FOREIGN KEY ([Username]) REFERENCES [dbo].[Employee] ([Username])
 );
@@ -46,6 +47,7 @@ ALTER TABLE [dbo].[Employee]
 ADD [Login_Attempts] INT NOT NULL
 DEFAULT (0);
 
+DBCC CHECKIDENT ('Log', RESEED, 1)
 
 
 

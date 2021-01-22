@@ -17,16 +17,16 @@
         </div>
 
         <!-- Login Form -->
-        @using (Ajax.BeginForm("Login", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" },
-            htmlAttributes: new { id = "loginForm", novalidate = "false" })) {
+        @using (Ajax.BeginForm("ValidateUser", "Login", null, new AjaxOptions { HttpMethod = "POST" },
+            htmlAttributes: new { id = "loginForm", novalidate = "false", role = "form" })) {
 
             @Html.AntiForgeryToken()
             @Html.EditorFor(model => model.Username, new {
                 htmlAttributes = new {
                 @class = "fadeIn second",
-                @placeholder = "login",
-                @id = "login",
-                @name = "login"
+                @placeholder = "username",
+                @id = "username",
+                @name = "username"
                 }
             })
             @Html.EditorFor(model => model.Password, new {
@@ -40,7 +40,12 @@
             @Html.ValidationMessageFor(model => model.Username, "", new { @class = "form-group text-danger", @id = "validateUsername" })
             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "form-group text-danger", @id = "validatePassword" })
 
-            @Html.ValidationSummary(true, "");
+            @Html.ValidationSummary(true, "", htmlAttributes: new { @class = "form-group text-danger" })
+
+            <div class="form-group" id="preloader" style="width: 100%; text-align: center; visibility:collapse; display: none; ">
+                <img src="https://thumbs.gfycat.com/BitterEarnestBeardeddragon-small.gif" alt="" style="display: block;width:50px;height:50px;visibility: inherit;" />
+                <span>Please Wait</span>
+            </div>
 
             <input type="submit" class="fadeIn fourth" value="Log In">
         }
@@ -55,29 +60,32 @@
 
 @section Scripts {
     <script>
+        function ShowPreloader() {
+            if (document.getElementById('preloader') != null) {
+                document.getElementById('preloader').style.visibility = 'visible';
+                $("#preloader").attr("display") = "block";
+            }
+        }
+        
         $(document).ready(function () {
-            $("#createForm").submit(function (event) {
-                var dataString;
+            $("#loginForm").submit(function (event) {
+                alert("Testing");
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                var action = $("#createForm").attr("action");
-                // Setting.
-                dataString = new FormData($("#createForm").get(0));
-                contentType = false;
-                processData = false;
+                var action = "/Login/ValidateUser;
+                alert(action);
                 $.ajax({
                     type: "POST",
                     url: action,
-                    data: dataString,
-                    dataType: "json",
-                    contentType: contentType,
-                    processData: processData,
+                    data: {
+                        username: $("#username").val(),
+                        password: $("#password").val()
+                    },
+                    contentType: "application/json; charset=utf-8",
                     success: function (result) {
-                        // Result.
-                        onAjaxRequestSuccess(result);
+
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        //do your own thing
                         alert("fail");
                     }
                 });
@@ -91,7 +99,7 @@
                 // Setting.
                 alert(result.SuccessMsg);
                 // Resetting form.
-                $('#AjaxformId').get(0).reset();
+                $('#loginForm').get(0).reset();
             }
         }
     </script>

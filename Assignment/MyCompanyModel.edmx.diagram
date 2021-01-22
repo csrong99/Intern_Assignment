@@ -5,14 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="2ad16dde9a844c14945e5ddb99d0faef" Name="Diagram1">
-        <EntityTypeShape EntityType="MyCompanyModel.Employee" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyCompanyModel.Position" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyCompanyModel.Status" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyCompanyModel.Team" Width="1.5" PointX="5.375" PointY="4.375" IsExpanded="true" />
-        <AssociationConnector Association="MyCompanyModel.FK_EmployeePosition" ManuallyRouted="false" />
-        <AssociationConnector Association="MyCompanyModel.FK_EmployeeStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="MyCompanyModel.FK_EmployeeTeam" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MyCompanyModel.Log" Width="1.5" PointX="5.25" PointY="2" />
+        <EntityTypeShape EntityType="MyCompanyModel.Employee" Width="1.5" PointX="3" PointY="2.375" />
+        <EntityTypeShape EntityType="MyCompanyModel.Log" Width="1.5" PointX="5.25" PointY="3.25" />
+        <EntityTypeShape EntityType="MyCompanyModel.Position" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MyCompanyModel.Status" Width="1.5" PointX="0.75" PointY="6.375" />
+        <EntityTypeShape EntityType="MyCompanyModel.Team" Width="1.5" PointX="0.75" PointY="3.625" />
+        <AssociationConnector Association="MyCompanyModel.FK_EmployeePosition" />
+        <AssociationConnector Association="MyCompanyModel.FK_EmployeeStatus" />
+        <AssociationConnector Association="MyCompanyModel.FK_EmployeeTeam" />
         <AssociationConnector Association="MyCompanyModel.FK_LogEmployee" />
       </Diagram>
     </edmx:Diagrams>
