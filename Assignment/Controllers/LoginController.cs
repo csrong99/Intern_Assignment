@@ -98,10 +98,27 @@ namespace Assignment.Controllers {
 
 			}
 			System.Diagnostics.Debug.WriteLine("Failed");
+			ViewBag.error = "Invalid username or password";
 
-			return Json(new { EnableError = true, ErrorTitle = "Error", ErrorMsg = "Invalid Username or Password" });
+			return View("Index");
 		}
 
+		[HttpGet]
+		public ActionResult Logout() {
+			FormsAuthentication.SignOut();
+			Log log = Session["logon"] as Log;
+
+			HttpContext.Application.Remove(log.Username);
+			Session.Clear();
+			Session.Abandon();
+
+			return new RedirectToRouteResult(
+				new System.Web.Routing.RouteValueDictionary(
+				new { controller = "Login", action = "Index", errorCode = "2" }
+				)
+			);
+
+		}
 
 		public string GetIp() {
 			string ip = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];

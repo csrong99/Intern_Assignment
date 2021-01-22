@@ -12,7 +12,7 @@ namespace Assignment {
 
 			routes.MapRoute(
 				name: "Login",
-				url: "login/",
+				url: "Login/{action}",
 				defaults: new { controller = "Login", action = "Index" }
 			);
 

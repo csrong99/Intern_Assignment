@@ -11,7 +11,9 @@ namespace Assignment
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Employee
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,6 +27,8 @@ namespace Assignment
         public string Email { get; set; }
         public string Full_Name { get; set; }
         public string Password { get; set; }
+
+        [DataType(DataType.Date)]
         public System.DateTime Join_Date { get; set; }
         public int Position { get; set; }
         public int Team { get; set; }

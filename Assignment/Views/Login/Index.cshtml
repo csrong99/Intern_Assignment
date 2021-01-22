@@ -37,70 +37,76 @@
                 @name = "login"
                 }
             })
-            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "form-group text-danger", @id = "validateUsername" })
-            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "form-group text-danger", @id = "validatePassword" })
 
-            @Html.ValidationSummary(true, "", htmlAttributes: new { @class = "form-group text-danger" })
 
             <div class="form-group" id="preloader" style="width: 100%; text-align: center; visibility:collapse; display: none; ">
                 <img src="https://thumbs.gfycat.com/BitterEarnestBeardeddragon-small.gif" alt="" style="display: block;width:50px;height:50px;visibility: inherit;" />
                 <span>Please Wait</span>
             </div>
-
+            <div>
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "form-group text-danger", @id = "validateUsername" })
+                <br />
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "form-group text-danger", @id = "validatePassword" })
+                <br />
+                @Html.ValidationSummary(true, "", htmlAttributes: new { @class = "form-group text-danger" })
+                <span>@ViewBag.error</span>
+            </div>
             <input type="submit" class="fadeIn fourth" value="Log In">
+
         }
 
         <!-- Remind Passowrd -->
-        <div id="formFooter">
+        @*<div id="formFooter">
             <a class="underlineHover" href="#">Forgot Password?</a>
-        </div>
-
+        </div>*@
     </div>
 </div>
 
 @section Scripts {
     <script>
-        function ShowPreloader() {
-            if (document.getElementById('preloader') != null) {
-                document.getElementById('preloader').style.visibility = 'visible';
-                $("#preloader").attr("display") = "block";
-            }
-        }
+        //function ShowPreloader() {
+        //    if (document.getElementById('preloader') != null) {
+        //        document.getElementById('preloader').style.visibility = 'visible';
+        //        $("#preloader").show();
+                
+        //    }
+        //}
         
-        $(document).ready(function () {
-            $("#loginForm").submit(function (event) {
-                alert("Testing");
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                var action = "/Login/ValidateUser;
-                alert(action);
-                $.ajax({
-                    type: "POST",
-                    url: action,
-                    data: {
-                        username: $("#username").val(),
-                        password: $("#password").val()
-                    },
-                    contentType: "application/json; charset=utf-8",
-                    success: function (result) {
+        //$(document).ready(function () {
+        //    $("#preloader").show();
+        //    $("#loginForm").submit(function (event) {
+        //        event.preventDefault();
+        //        event.stopImmediatePropagation();
+        //        var action = "/Login/ValidateUser";
+        //        alert(action);
+        //        $.ajax({
+        //            type: "POST",
+        //            url: action,
+        //            data: {
+        //                username: $("#username").val(),
+        //                password: $("#password").val()
+        //            },
+        //            contentType: "application/json; charset=utf-8",
+        //            success: function (result) {
 
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert("fail");
-                    }
-                });
-            }); //end .submit()
-        });
-        var onAjaxRequestSuccess = function (result) {
-            if (result.EnableError) {
-                // Setting.
-                alert(result.ErrorMsg);
-            } else if (result.EnableSuccess) {
-                // Setting.
-                alert(result.SuccessMsg);
-                // Resetting form.
-                $('#loginForm').get(0).reset();
-            }
-        }
+        //            },
+        //            error: function (jqXHR, textStatus, errorThrown) {
+        //                $("#preloader").hide();
+        //                alert("fail");
+        //            }
+        //        });
+        //    }); //end .submit()
+        //});
+        //var onAjaxRequestSuccess = function (result) {
+        //    if (result.EnableError) {
+        //        // Setting.
+        //        alert(result.ErrorMsg);
+        //    } else if (result.EnableSuccess) {
+        //        // Setting.
+        //        alert(result.SuccessMsg);
+        //        // Resetting form.
+        //        $('#loginForm').get(0).reset();
+        //    }
+        //}
     </script>
     }

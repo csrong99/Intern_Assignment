@@ -204,15 +204,17 @@ namespace Assignment.Views {
 			base.OnActionExecuting(filterContext);
 			System.Diagnostics.Debug.WriteLine("Executing");
 			System.Diagnostics.Debug.WriteLine("sess id: " + Session.SessionID);
-			string username = ((Log)Session["logon"]).Username;
-			if (!Session.SessionID.Equals(HttpContext.Application[username])) {
-				// set FormAuthentication
-				FormsAuthentication.SignOut();
-				filterContext.Result = new RedirectToRouteResult(
-					new System.Web.Routing.RouteValueDictionary(
-					new { controller = "Login", action = "Index", errorCode = "2" }
-					)
-				); 
+			if (Session["logon"] != null) {
+				string username = ((Log)Session["logon"]).Username;
+				if (!Session.SessionID.Equals(HttpContext.Application[username])) {
+					// set FormAuthentication
+					FormsAuthentication.SignOut();
+					filterContext.Result = new RedirectToRouteResult(
+						new System.Web.Routing.RouteValueDictionary(
+						new { controller = "Login", action = "Index", errorCode = "2" }
+						)
+					);
+				}
 			}
 		}
 
