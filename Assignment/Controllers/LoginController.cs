@@ -24,7 +24,7 @@ namespace Assignment.Controllers {
 				string username = emp_login_view.Username;
 				string password = emp_login_view.Password;
 
-				Employee emp_logon = db.Employees.Where(emp => emp.Username.ToLower().Equals(username.ToLower())).FirstOrDefault();
+				Employee employee_logon = db.Employees.Where(emp => emp.Username.ToLower().Equals(username.ToLower())).FirstOrDefault();
 
 				string ipv4 = GetIp();
 				Log new_log = new Log {
@@ -33,22 +33,22 @@ namespace Assignment.Controllers {
 				};
 
 				// Check if valid username
-				if (emp_logon != null) {
+				if (employee_logon != null) {
 
 					// Check if the user is suspended
-					if (emp_logon.Status == 3) {
+					if (employee_logon.Status == 3 || employee_logon.Status == 2) {
 						new_log.successful = false;
-						new_log.Username = emp_logon.Username;
+						new_log.Username = employee_logon.Username;
 						db.Logs.Add(new_log);
 						db.SaveChanges();
 
-						string error_msg = "Your account has been suspended. Please contact admin";
+						string error_msg = "Your account has been suspended or disabled. Please contact admin";
 						return Json(new { EnableError = true, ErrorTitle = "Error", ErrorMsg = error_msg });
 					}
 					// Check if the password is correct 
-					else if (emp_logon.Password.Equals(password)) {
+					else if (employee_logon.Password.Equals(password)) {
 						new_log.successful = true;
-						new_log.Username = emp_logon.Username;
+						new_log.Username = employee_logon.Username;
 						db.Logs.Add(new_log);
 						db.SaveChanges();
 
@@ -75,14 +75,13 @@ namespace Assignment.Controllers {
 							
 						}
 
-
-						return RedirectToAction("Index", "Employees");
+						return Json(new { EnableSuccess = true, RedirectUrl = "/Employees" });
 
 					}
 					// if user is suspended or password is incorrect
 					else {
 						new_log.successful = false;
-						new_log.Username = emp_logon.Username;
+						new_log.Username = employee_logon.Username;
 						db.Logs.Add(new_log);
 						db.SaveChanges();
 					}
@@ -98,9 +97,8 @@ namespace Assignment.Controllers {
 
 			}
 			System.Diagnostics.Debug.WriteLine("Failed");
-			ViewBag.error = "Invalid username or password";
 
-			return View("Index");
+			return Json(new { EnableError = true, ErrorTitle = "Error", ErrorMsg = "Invalid username or password" });
 		}
 
 		[HttpGet]
@@ -127,9 +125,6 @@ namespace Assignment.Controllers {
 			}
 			return ip;
 		}
-
-
-
 	}
 
 

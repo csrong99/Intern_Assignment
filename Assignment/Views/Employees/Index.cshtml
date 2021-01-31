@@ -4,12 +4,20 @@
     ViewBag.Title = "Index";
 }
 
-@Html.ActionLink("Logout", "Logout", controllerName: "Login")
+@Html.ActionLink("Logout", 
+    "Logout", 
+    controllerName: "Login", 
+    routeValues: null,  
+    htmlAttributes: new { role = "button", @class = "btn btn-danger"})
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New",
+    "Create",
+    routeValues: null,
+    htmlAttributes: new { role = "button", @class = "btn btn-primary" }
+    )
 </p>
 <table class="table">
     <tr>
@@ -57,7 +65,7 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Username }, htmlAttributes: new { @class = "btn btn-primary", @type = "button" })
                 <button id="@item.Username" type="button" class="btn btn-danger deleteLink" data-toggle="modal" data-target="#deleteModal">
-                    Delete
+                    Disable
                 </button>
             </td>
         </tr>
@@ -71,13 +79,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="h5_delete">Delete Confirmation</h5>
+                <h5 class="modal-title" id="h5_delete">Disable Confirmation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div id="deleteModalBody" class="modal-body">
-                Are you sure to delete this record?
+                Are you sure to disable this record?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

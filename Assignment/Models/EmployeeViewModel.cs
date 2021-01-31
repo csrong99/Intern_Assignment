@@ -79,6 +79,7 @@ namespace Assignment.Models {
 		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Username must be alphanumeric")]
 		public string Username { get; set; }
 
+		[MaxLength(10, ErrorMessage = "Employee ID must be within 10 numbers")]
 		[Required(ErrorMessage = "Please fill-in employee ID")]
 		public int Employee_ID { get; set; }
 
@@ -87,14 +88,14 @@ namespace Assignment.Models {
 		[RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "This email address is not valid")]
 		public string Email { get; set; }
 
-		[StringLength(15, ErrorMessage = "Full name must not exceed 20 characters")]
+		[StringLength(20, ErrorMessage = "Full name must not exceed 20 characters")]
 		public string Full_Name { get; set; }
 
 		[DataType(DataType.Password)]
 		[StringLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
 		[MinLength(8, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
 		[MaxLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Password must be alphanumeric")]
+		[RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$", ErrorMessage = "Password must include letters and numbers")]
 		public string Password { get; set; }
 
 		[NotMapped]
@@ -103,6 +104,7 @@ namespace Assignment.Models {
 		public string Confirm_Password { get; set; }
 
 		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
 		[Required(ErrorMessage = "Please fill-in join date")]
 		public System.DateTime Join_Date { get; set; }
 
@@ -127,6 +129,7 @@ namespace Assignment.Models {
 		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Username must be alphanumeric")]
 		public string Username { get; set; }
 
+		[MaxLength(10, ErrorMessage = "Employee ID must be within 10 numbers")]
 		[Required(ErrorMessage = "Please fill-in employee ID")]
 		public int Employee_ID { get; set; }
 
@@ -135,14 +138,14 @@ namespace Assignment.Models {
 		[RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "This email address is not valid")]
 		public string Email { get; set; }
 
-		[StringLength(15, ErrorMessage = "Full name must not exceed 20 characters")]
+		[StringLength(20, ErrorMessage = "Full name must not exceed 20 characters")]
 		public string Full_Name { get; set; }
 
 		[DataType(DataType.Password)]
 		[StringLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
 		[MinLength(8, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
 		[MaxLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Password must be alphanumeric")]
+		[RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$", ErrorMessage = "Password must include letters and numbers")]
 		[Required(ErrorMessage = "Please fill-in password")]
 		public string Password { get; set; }
 

@@ -7,6 +7,40 @@
 <!------ Include the above in your HEAD tag ---------->
 
 @Styles.Render("~/Content/login")
+@section styles {
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+        }
+
+        /* Safari */
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+}
 
 <div class="wrapper fadeInDown align-items-center">
     <div id="formContent">
@@ -17,7 +51,7 @@
         </div>
 
         <!-- Login Form -->
-        @using (Ajax.BeginForm("ValidateUser", "Login", null, new AjaxOptions { HttpMethod = "POST" },
+        @using (Html.BeginForm("ValidateUser", "Login", FormMethod.Post,
             htmlAttributes: new { id = "loginForm", novalidate = "false", role = "form" })) {
 
             @Html.AntiForgeryToken()
@@ -37,76 +71,78 @@
                 @name = "login"
                 }
             })
-
-
-            <div class="form-group" id="preloader" style="width: 100%; text-align: center; visibility:collapse; display: none; ">
-                <img src="https://thumbs.gfycat.com/BitterEarnestBeardeddragon-small.gif" alt="" style="display: block;width:50px;height:50px;visibility: inherit;" />
-                <span>Please Wait</span>
-            </div>
             <div>
-                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "form-group text-danger", @id = "validateUsername" })
-                <br />
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "form-group text-danger", @id = "validatePassword" })
-                <br />
-                @Html.ValidationSummary(true, "", htmlAttributes: new { @class = "form-group text-danger" })
-                <span>@ViewBag.error</span>
+                <div>
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "form-group text-danger", @id = "validateUsername" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "form-group text-danger", @id = "validatePassword" })
+                </div>
+                <div>
+                    <span id="error" style="color:red;"></span>
+                </div>
             </div>
             <input type="submit" class="fadeIn fourth" value="Log In">
-
         }
+
+        <div class="loader mx-auto" id="loader" style="display: none"></div>
 
         <!-- Remind Passowrd -->
         @*<div id="formFooter">
-            <a class="underlineHover" href="#">Forgot Password?</a>
-        </div>*@
+                <a class="underlineHover" href="#">Forgot Password?</a>
+            </div>*@
     </div>
 </div>
 
 @section Scripts {
     <script>
-        //function ShowPreloader() {
-        //    if (document.getElementById('preloader') != null) {
-        //        document.getElementById('preloader').style.visibility = 'visible';
-        //        $("#preloader").show();
-                
-        //    }
-        //}
-        
-        //$(document).ready(function () {
-        //    $("#preloader").show();
-        //    $("#loginForm").submit(function (event) {
-        //        event.preventDefault();
-        //        event.stopImmediatePropagation();
-        //        var action = "/Login/ValidateUser";
-        //        alert(action);
-        //        $.ajax({
-        //            type: "POST",
-        //            url: action,
-        //            data: {
-        //                username: $("#username").val(),
-        //                password: $("#password").val()
-        //            },
-        //            contentType: "application/json; charset=utf-8",
-        //            success: function (result) {
+        $("#username").focusin(function () {
+            $("#error").text("");
+        })
+        $("#password").focusin(function () {
+            $("#error").text("");
+        })
+        $(document).ajaxStart(function () {
+            $("#loginForm").hide();
+            $("#loader").show();
+        }).ajaxStop(function () {
+            $("#loader").delay(3000).hide('slow');
+            $("#loginForm").delay(3000).show('slow');
+        });
 
-        //            },
-        //            error: function (jqXHR, textStatus, errorThrown) {
-        //                $("#preloader").hide();
-        //                alert("fail");
-        //            }
-        //        });
-        //    }); //end .submit()
-        //});
-        //var onAjaxRequestSuccess = function (result) {
-        //    if (result.EnableError) {
-        //        // Setting.
-        //        alert(result.ErrorMsg);
-        //    } else if (result.EnableSuccess) {
-        //        // Setting.
-        //        alert(result.SuccessMsg);
-        //        // Resetting form.
-        //        $('#loginForm').get(0).reset();
-        //    }
-        //}
+        $(document).ready(function () {
+            $("#loginForm").submit(function (event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                if ($("#username").val().length != 0 && $("#password").val().length != 0) {
+                    var action = "/Login/ValidateUser";
+                    $.ajax({
+                        type: "POST",
+                        url: action,
+                        data: {
+                            username: $("#username").val(),
+                            password: $("#password").val()
+                        },
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.EnableError) {
+                                $('#loginForm').get(0).reset();
+                                $("#error").text(result.ErrorMsg);
+                            } else if (result.EnableSuccess) {
+                                window.location.href = result.RedirectUrl;
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(textStatus);
+                            alert(errorThrown.toString());
+                            $("#preloader").hide();
+                            alert("fail");
+                        }
+                    });
+                }
+
+            }); //end .submit()
+        });
     </script>
-    }
+}

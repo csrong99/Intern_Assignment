@@ -100,20 +100,20 @@ namespace Assignment.Views {
 		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit([Bind(Include = "Username,Employee_ID,Email,Full_Name,Password,Confirm_Password,Join_Date,Position,Team,Security_Phrase,Status")] EmployeeEditViewModel emp_view) {
+		public ActionResult Edit([Bind(Include = "Username,Employee_ID,Email,Full_Name,Password,Confirm_Password,Join_Date,Position,Team,Security_Phrase,Status")] EmployeeEditViewModel employee_view) {
 			if (ModelState.IsValid) {
-				Employee new_emp = EmployeeViewModel.EditViewToEmployee(emp_view);
-				Employee emp = db.Employees.Find(new_emp.Username);
-				emp = db.Employees.Attach(emp);
-				emp.Email = new_emp.Email;
-				emp.Full_Name = new_emp.Full_Name;
-				emp.Join_Date = new_emp.Join_Date;
-				emp.Status = new_emp.Status;
-				emp.Team = new_emp.Team;
-				emp.Position = new_emp.Position;
-				emp.Security_Phrase = new_emp.Security_Phrase;
-				if (!string.IsNullOrEmpty(new_emp.Password)) {
-					emp.Password = new_emp.Password;
+				Employee new_employee = EmployeeViewModel.EditViewToEmployee(employee_view);
+				Employee employee = db.Employees.Find(new_employee.Username);
+				employee = db.Employees.Attach(employee);
+				employee.Email = new_employee.Email;
+				employee.Full_Name = new_employee.Full_Name;
+				employee.Join_Date = new_employee.Join_Date;
+				employee.Status = new_employee.Status;
+				employee.Team = new_employee.Team;
+				employee.Position = new_employee.Position;
+				employee.Security_Phrase = new_employee.Security_Phrase;
+				if (!string.IsNullOrEmpty(new_employee.Password)) {
+					employee.Password = new_employee.Password;
 				}
 				try {
 					db.SaveChanges();
@@ -132,10 +132,10 @@ namespace Assignment.Views {
 
 				return RedirectToAction("Index");
 			}
-			ViewBag.Position = new SelectList(db.Positions, "Position_ID", "Name", emp_view.Position);
-			ViewBag.Status = new SelectList(db.Status, "Status_ID", "Name", emp_view.Status);
-			ViewBag.Team = new SelectList(db.Teams, "Team_ID", "Name", emp_view.Team);
-			return View(emp_view);
+			ViewBag.Position = new SelectList(db.Positions, "Position_ID", "Name", employee_view.Position);
+			ViewBag.Status = new SelectList(db.Status, "Status_ID", "Name", employee_view.Status);
+			ViewBag.Team = new SelectList(db.Teams, "Team_ID", "Name", employee_view.Team);
+			return View(employee_view);
 		}
 
 		// GET: Employees/Delete/5
@@ -157,7 +157,7 @@ namespace Assignment.Views {
 		[ValidateAntiForgeryToken]
 		public ActionResult DeleteConfirmed(string id) {
 			Employee employee = db.Employees.Find(id);
-			db.Employees.Remove(employee);
+			employee.Status = 2;
 			db.SaveChanges();
 			return RedirectToAction("Index");
 		}
@@ -192,7 +192,7 @@ namespace Assignment.Views {
 				emp_id_existed = db.Employees.Where(x => x.Employee_ID == (emp_id)).Count() != 0 ? true : false;
 
 			}
-			catch (Exception ex) {
+			catch (Exception) {
 
 			}
 			return Json(emp_id_existed.ToString(), JsonRequestBehavior.AllowGet);
