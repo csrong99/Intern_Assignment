@@ -16,7 +16,7 @@ namespace Assignment
     {
         public int Id { get; set; }
         public System.DateTime Attempt_Time { get; set; }
-        public string Username { get; set; }
+        public Nullable<int> Employee_ID { get; set; }
         public string Ipv4 { get; set; }
         public bool successful { get; set; }
     

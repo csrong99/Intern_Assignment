@@ -7,7 +7,7 @@
     <Schema Namespace="MyCompanyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Employee">
           <Key>
-            <PropertyRef Name="Username" />
+            <PropertyRef Name="Employee_ID" />
           </Key>
           <Property Name="Username" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="Employee_ID" Type="int" Nullable="false" />
@@ -27,7 +27,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Attempt_Time" Type="datetime" Nullable="false" />
-          <Property Name="Username" Type="nvarchar" MaxLength="15" />
+          <Property Name="Employee_ID" Type="int" />
           <Property Name="Ipv4" Type="nchar" MaxLength="20" Nullable="false" />
           <Property Name="successful" Type="bit" Nullable="false" />
         </EntityType>
@@ -93,10 +93,10 @@
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="Username" />
+              <PropertyRef Name="Employee_ID" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="Username" />
+              <PropertyRef Name="Employee_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -152,7 +152,7 @@
         </EntityContainer>
         <EntityType Name="Employee">
           <Key>
-            <PropertyRef Name="Username" />
+            <PropertyRef Name="Employee_ID" />
           </Key>
           <Property Name="Username" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Employee_ID" Type="Int32" Nullable="false" />
@@ -174,9 +174,9 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Attempt_Time" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Username" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Employee_ID" Type="Int32" />
           <Property Name="Ipv4" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
           <Property Name="successful" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Employee" Relationship="MyCompanyModel.FK_LogEmployee" FromRole="Log" ToRole="Employee" />
@@ -246,10 +246,10 @@
           <End Type="MyCompanyModel.Log" Role="Log" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="Username" />
+              <PropertyRef Name="Employee_ID" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="Username" />
+              <PropertyRef Name="Employee_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -281,7 +281,7 @@
               <MappingFragment StoreEntitySet="Log">
                 <ScalarProperty Name="successful" ColumnName="successful" />
                 <ScalarProperty Name="Ipv4" ColumnName="Ipv4" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Employee_ID" ColumnName="Employee_ID" />
                 <ScalarProperty Name="Attempt_Time" ColumnName="Attempt_Time" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

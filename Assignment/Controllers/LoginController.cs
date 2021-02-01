@@ -38,7 +38,7 @@ namespace Assignment.Controllers {
 					// Check if the user is suspended
 					if (employee_logon.Status == 3 || employee_logon.Status == 2) {
 						new_log.successful = false;
-						new_log.Username = employee_logon.Username;
+						new_log.Employee_ID = employee_logon.Employee_ID;
 						db.Logs.Add(new_log);
 						db.SaveChanges();
 
@@ -48,7 +48,7 @@ namespace Assignment.Controllers {
 					// Check if the password is correct 
 					else if (employee_logon.Password.Equals(password)) {
 						new_log.successful = true;
-						new_log.Username = employee_logon.Username;
+						new_log.Employee_ID = employee_logon.Employee_ID;
 						db.Logs.Add(new_log);
 						db.SaveChanges();
 
@@ -56,24 +56,28 @@ namespace Assignment.Controllers {
 						System.Diagnostics.Debug.WriteLine("Successful Login");
 						HttpApplicationStateBase app_state = HttpContext.Application;
 
-						FormsAuthentication.SetAuthCookie(new_log.Username, false);
+						FormsAuthentication.SetAuthCookie(new_log.Employee_ID.ToString(), false);
 						// Create a new logon session
 						Session["logon"] = new_log;
 
+						app_state.Lock();
 						// If the username didnt logon in before
-						if (app_state[new_log.Username] == null) {
+						if (app_state[new_log.Employee_ID.ToString()] == null) {
 							System.Diagnostics.Debug.WriteLine("Didnt Login Before");
-							app_state.Add(new_log.Username, Session.SessionID);
+							
+							app_state.Add(new_log.Employee_ID.ToString(), Session.SessionID);
+							
 						} 
 						// If the username is logged in and have active session
 						else {
 							System.Diagnostics.Debug.WriteLine("Login Before");
-							string sess_ID = app_state[new_log.Username] as string;
+							string sess_ID = app_state[new_log.Employee_ID.ToString()] as string;
 							if (!sess_ID.Equals(Session.SessionID)) {
-								app_state[new_log.Username] = Session.SessionID;
+								app_state[new_log.Employee_ID.ToString()] = Session.SessionID;
 							}
 							
 						}
+						app_state.UnLock();
 
 						return Json(new { EnableSuccess = true, RedirectUrl = "/Employees" });
 
@@ -81,7 +85,7 @@ namespace Assignment.Controllers {
 					// if user is suspended or password is incorrect
 					else {
 						new_log.successful = false;
-						new_log.Username = employee_logon.Username;
+						new_log.Employee_ID = employee_logon.Employee_ID;
 						db.Logs.Add(new_log);
 						db.SaveChanges();
 					}
@@ -106,7 +110,7 @@ namespace Assignment.Controllers {
 			FormsAuthentication.SignOut();
 			Log log = Session["logon"] as Log;
 
-			HttpContext.Application.Remove(log.Username);
+			HttpContext.Application.Remove(log.Employee_ID.ToString());
 			Session.Clear();
 			Session.Abandon();
 

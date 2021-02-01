@@ -159,8 +159,8 @@
                 var username = $("#username").val();
                 $.ajax({
                     type: "GET",
-                    url: 'IsUserAvailable',
-                    data: "id=" + username,
+                    url: 'IsUsernameAvailable',
+                    data: "username=" + username,
                     contentType: 'json',
                     contentType: 'application/json',
                     success: function (result) {

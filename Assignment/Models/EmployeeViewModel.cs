@@ -72,15 +72,9 @@ namespace Assignment.Models {
 	}
 
 	public class EmployeeEditViewModel {
-		[Required(ErrorMessage = "Please fill-in username")]
-		[StringLength(15, ErrorMessage = "Username must be 8-15 characters, and include letters and numbers")]
-		[MinLength(8)]
-		[MaxLength(15)]
-		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Username must be alphanumeric")]
+
 		public string Username { get; set; }
 
-		[MaxLength(10, ErrorMessage = "Employee ID must be within 10 numbers")]
-		[Required(ErrorMessage = "Please fill-in employee ID")]
 		public int Employee_ID { get; set; }
 
 		[DataType(DataType.EmailAddress)]
@@ -129,7 +123,7 @@ namespace Assignment.Models {
 		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Username must be alphanumeric")]
 		public string Username { get; set; }
 
-		[MaxLength(10, ErrorMessage = "Employee ID must be within 10 numbers")]
+		[Range(1, 10, ErrorMessage = "Employee ID must be within 10 numbers")]
 		[Required(ErrorMessage = "Please fill-in employee ID")]
 		public int Employee_ID { get; set; }
 

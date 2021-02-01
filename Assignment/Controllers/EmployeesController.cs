@@ -52,17 +52,17 @@ namespace Assignment.Views {
 		[ValidateAntiForgeryToken]
 		public ActionResult Create([Bind(Include = "Username,Employee_ID,Email,Full_Name,Password,Confirm_Password,Join_Date,Position,Team,Security_Phrase,Status")] EmployeeCreateViewModel emp_view) {
 			if (ModelState.IsValid) {
-				Employee emp = EmployeeViewModel.CreateViewToEmployee(emp_view);
-				if (db.Employees.Find(emp.Username) != null) {
-					ModelState.AddModelError(string.Empty, "Username existed");
+				Employee employee = EmployeeViewModel.CreateViewToEmployee(emp_view);
+				if (db.Employees.Find(employee.Employee_ID) != null) {
+					ModelState.AddModelError(string.Empty, "Employee ID existed in Database");
 				}
 
-				if (db.Employees.Where(x => x.Employee_ID == emp.Employee_ID).Count() != 0) {
-					ModelState.AddModelError(string.Empty, "Employee ID existed in Database");
+				if (db.Employees.Where(x => x.Username.Equals(employee.Username)).Count() != 0) {
+					ModelState.AddModelError(string.Empty, "Username existed");
 
 				}
 				else {
-					db.Employees.Add(emp);
+					db.Employees.Add(employee);
 					db.SaveChanges();
 					return RedirectToAction("Index");
 				}
@@ -78,10 +78,18 @@ namespace Assignment.Views {
 		// GET: Employees/Edit/5
 		[Authorize]
 		public ActionResult Edit(string id) {
+			int employee_id;
+
+			try {
+				employee_id = int.Parse(id);
+            } catch (Exception) {
+				return View("Error");
+			}
 			if (id == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Employee employee = db.Employees.Find(id);
+			
+			Employee employee = db.Employees.Find(employee_id);
 
 			if (employee == null) {
 				return HttpNotFound();
@@ -100,10 +108,10 @@ namespace Assignment.Views {
 		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit([Bind(Include = "Username,Employee_ID,Email,Full_Name,Password,Confirm_Password,Join_Date,Position,Team,Security_Phrase,Status")] EmployeeEditViewModel employee_view) {
+		public ActionResult Edit(EmployeeEditViewModel employee_view) {
 			if (ModelState.IsValid) {
 				Employee new_employee = EmployeeViewModel.EditViewToEmployee(employee_view);
-				Employee employee = db.Employees.Find(new_employee.Username);
+				Employee employee = db.Employees.Find(new_employee.Employee_ID);
 				employee = db.Employees.Attach(employee);
 				employee.Email = new_employee.Email;
 				employee.Full_Name = new_employee.Full_Name;
@@ -132,6 +140,7 @@ namespace Assignment.Views {
 
 				return RedirectToAction("Index");
 			}
+			
 			ViewBag.Position = new SelectList(db.Positions, "Position_ID", "Name", employee_view.Position);
 			ViewBag.Status = new SelectList(db.Status, "Status_ID", "Name", employee_view.Status);
 			ViewBag.Team = new SelectList(db.Teams, "Team_ID", "Name", employee_view.Team);
@@ -140,8 +149,8 @@ namespace Assignment.Views {
 
 		// GET: Employees/Delete/5
 		[Authorize]
-		public ActionResult Delete(string id) {
-			if (id == null) {
+		public ActionResult Delete(int id) {
+			if (id <= 0) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
 			Employee employee = db.Employees.Find(id);
@@ -155,7 +164,7 @@ namespace Assignment.Views {
 		[Authorize]
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public ActionResult DeleteConfirmed(string id) {
+		public ActionResult DeleteConfirmed(int id) {
 			Employee employee = db.Employees.Find(id);
 			employee.Status = 2;
 			db.SaveChanges();
@@ -164,49 +173,50 @@ namespace Assignment.Views {
 		// GET : GetDeletePartial/5
 		[Authorize]
 		[HttpGet]
-		public PartialViewResult GetDeletePartial(string id) {
+		public PartialViewResult GetDeletePartial(int id) {
 			var deleteItem = db.Employees.Find(id);
 			return PartialView("Delete", deleteItem);
 		}
 
 		// GET: Employees/IsUserAvailable/abc123
 		[HttpGet]
-		public JsonResult IsUserAvailable(string id) {
-			bool userAvailable = false;
+		public JsonResult IsUsernameAvailable(string username) {
+			bool username_available = false;
 
-			if (!string.IsNullOrWhiteSpace(id)) {
-				userAvailable = db.Employees.Find(id) == null ? true : false;
-			}
+			username_available = db.Employees.Where(x => x.Username.Equals(username)).Count() == 0 ? true : false;
 
-
-			return Json(userAvailable.ToString(), JsonRequestBehavior.AllowGet);
+			return Json(username_available.ToString(), JsonRequestBehavior.AllowGet);
 
 		}
 
 		[HttpGet]
-		public JsonResult IsIDExisted(string id) {
-			bool emp_id_existed = false;
-			int emp_id;
-			try {
-				emp_id = int.Parse(id);
-				emp_id_existed = db.Employees.Where(x => x.Employee_ID == (emp_id)).Count() != 0 ? true : false;
+        public JsonResult IsIDExisted(string id) {
 
-			}
-			catch (Exception) {
+            bool emp_id_existed = false;
+            int emp_id;
+            if (!string.IsNullOrEmpty(id)) {
+                try {
+                    emp_id = int.Parse(id);
+                    emp_id_existed = db.Employees.Find(emp_id) != null ? true : false;
 
-			}
-			return Json(emp_id_existed.ToString(), JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception) {
 
-		}
+                }
+            }
+
+            return Json(emp_id_existed.ToString(), JsonRequestBehavior.AllowGet);
+
+        }
 
 
-		protected override void OnActionExecuting(ActionExecutingContext filterContext) {
+        protected override void OnActionExecuting(ActionExecutingContext filterContext) {
 			base.OnActionExecuting(filterContext);
 			System.Diagnostics.Debug.WriteLine("Executing");
 			System.Diagnostics.Debug.WriteLine("sess id: " + Session.SessionID);
 			if (Session["logon"] != null) {
-				string username = ((Log)Session["logon"]).Username;
-				if (!Session.SessionID.Equals(HttpContext.Application[username])) {
+				string employee_id = ((Log)Session["logon"]).Employee_ID.ToString();
+				if (!Session.SessionID.Equals(HttpContext.Application[employee_id])) {
 					// set FormAuthentication
 					FormsAuthentication.SignOut();
 					filterContext.Result = new RedirectToRouteResult(

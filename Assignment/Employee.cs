@@ -12,7 +12,6 @@ namespace Assignment
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class Employee
     {
@@ -27,7 +26,6 @@ namespace Assignment
         public string Email { get; set; }
         public string Full_Name { get; set; }
         public string Password { get; set; }
-
         [DataType(DataType.Date)]
         public System.DateTime Join_Date { get; set; }
         public int Position { get; set; }

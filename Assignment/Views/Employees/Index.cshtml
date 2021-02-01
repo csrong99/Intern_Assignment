@@ -63,8 +63,8 @@
                 @Html.DisplayFor(modelItem => item.Status1.Name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Username }, htmlAttributes: new { @class = "btn btn-primary", @type = "button" })
-                <button id="@item.Username" type="button" class="btn btn-danger deleteLink" data-toggle="modal" data-target="#deleteModal">
+                @Html.ActionLink("Edit", "Edit", new { id = item.Employee_ID }, htmlAttributes: new { @class = "btn btn-primary", @type = "button" })
+                <button id="@item.Employee_ID" type="button" class="btn btn-danger deleteLink" data-toggle="modal" data-target="#deleteModal">
                     Disable
                 </button>
             </td>
