@@ -115,7 +115,7 @@ namespace Assignment.Controllers {
 
 			return new RedirectToRouteResult(
 				new System.Web.Routing.RouteValueDictionary(
-				new { controller = "Login", action = "Index", errorCode = "2" }
+				new { controller = "Login", action = "Index" }
 				)
 			);
 

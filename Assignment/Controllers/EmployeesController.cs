@@ -161,10 +161,16 @@ namespace Assignment.Views {
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public ActionResult DeleteConfirmed(int id) {
-			Employee employee = db.Employees.Find(id);
-			employee.Status = 2;
-			db.SaveChanges();
-			return RedirectToAction("Index");
+			Employee employee = db.Employees.Include(inc => inc.Logs).First(e => e.Employee_ID == id);
+            employee = db.Employees.Remove(employee);
+            db.SaveChanges();
+
+			Log log = Session["logon"] as Log;
+
+			if (employee.Employee_ID == log.Employee_ID)
+				return RedirectToAction("Logout", "Login");
+
+			else return RedirectToAction("Index");
 		}
 		// GET : GetDeletePartial/5
 		[Authorize]

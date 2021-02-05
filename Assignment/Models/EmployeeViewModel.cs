@@ -87,10 +87,8 @@ namespace Assignment.Models {
 		public string Full_Name { get; set; }
 
 		[DataType(DataType.Password)]
-		[StringLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[MinLength(8, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[MaxLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$", ErrorMessage = "Password must include letters and numbers")]
+		[StringLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers", MinimumLength = 8)]
+		[RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]*$", ErrorMessage = "Password must include letters and numbers")]
 		public string Password { get; set; }
 
 		[NotMapped]
@@ -125,7 +123,8 @@ namespace Assignment.Models {
 		[Remote("IsUsernameAvailable", "Employees", HttpMethod = "POST",ErrorMessage ="Username already exists")]
 		public string Username { get; set; }
 
-		[Range(1, 10, ErrorMessage = "Employee ID must be within 10 numbers")]
+		[RegularExpression(@"^(\d{1,10})$", ErrorMessage = "Employee ID must be more than 0 and within 10 numbers")]
+		[Range(1, long.MaxValue, ErrorMessage = "Please enter a value bgger than {1}")]
 		[Required(ErrorMessage = "Please fill-in employee ID")]
 		[Remote("IsIDAvailable", "Employees", HttpMethod = "POST", ErrorMessage = "Employee ID already exists")]
 		public int Employee_ID { get; set; }
@@ -139,11 +138,8 @@ namespace Assignment.Models {
 		public string Full_Name { get; set; }
 
 		[DataType(DataType.Password)]
-		[StringLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[MinLength(8, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[MaxLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers")]
-		[RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$", ErrorMessage = "Password must include letters and numbers")]
-		[Required(ErrorMessage = "Please fill-in password")]
+		[StringLength(15, ErrorMessage = "Password must be 8-15 characters, and include letters and numbers", MinimumLength = 8)]
+		[RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]*$", ErrorMessage = "Password must include letters and numbers")]
 		public string Password { get; set; }
 
 		[NotMapped]
