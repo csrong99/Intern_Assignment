@@ -18,7 +18,6 @@ namespace Assignment.Controllers {
 		// POST: Login/ValidateUser
 		[HttpPost]
 		public ActionResult ValidateUser([Bind(Include = "username,password")] EmployeeLoginViewModel emp_login_view) {
-			System.Diagnostics.Debug.WriteLine("passed in here");
 
 			if (ModelState.IsValid) {
 				string username = emp_login_view.Username;
@@ -46,14 +45,12 @@ namespace Assignment.Controllers {
 						return Json(new { EnableError = true, ErrorTitle = "Error", ErrorMsg = error_msg });
 					}
 					// Check if the password is correct 
-					else if (employee_logon.Password.Equals(password)) {
+					else if (Hashing.ValidatePassword(password, employee_logon.Password)) {
 						new_log.successful = true;
 						new_log.Employee_ID = employee_logon.Employee_ID;
 						db.Logs.Add(new_log);
 						db.SaveChanges();
 
-
-						System.Diagnostics.Debug.WriteLine("Successful Login");
 						HttpApplicationStateBase app_state = HttpContext.Application;
 
 						FormsAuthentication.SetAuthCookie(new_log.Employee_ID.ToString(), false);
@@ -63,14 +60,12 @@ namespace Assignment.Controllers {
 						app_state.Lock();
 						// If the username didnt logon in before
 						if (app_state[new_log.Employee_ID.ToString()] == null) {
-							System.Diagnostics.Debug.WriteLine("Didnt Login Before");
 							
 							app_state.Add(new_log.Employee_ID.ToString(), Session.SessionID);
 							
 						} 
 						// If the username is logged in and have active session
 						else {
-							System.Diagnostics.Debug.WriteLine("Login Before");
 							string sess_ID = app_state[new_log.Employee_ID.ToString()] as string;
 							if (!sess_ID.Equals(Session.SessionID)) {
 								app_state[new_log.Employee_ID.ToString()] = Session.SessionID;
@@ -100,7 +95,6 @@ namespace Assignment.Controllers {
 				}
 
 			}
-			System.Diagnostics.Debug.WriteLine("Failed");
 
 			return Json(new { EnableError = true, ErrorTitle = "Error", ErrorMsg = "Invalid username or password" });
 		}

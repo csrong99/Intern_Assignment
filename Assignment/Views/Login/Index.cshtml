@@ -105,9 +105,6 @@
         $(document).ajaxStart(function () {
             $("#loginForm").hide();
             $("#loader").show();
-        }).ajaxStop(function () {
-            $("#loader").delay(3000).hide('slow');
-            $("#loginForm").delay(3000).show('slow');
         });
 
         $(document).ready(function () {
@@ -129,15 +126,13 @@
                             if (result.EnableError) {
                                 $('#loginForm').get(0).reset();
                                 $("#error").text(result.ErrorMsg);
+                                $("#loader").delay(3000).hide('slow');
+                                $("#loginForm").delay(3000).show('slow');
                             } else if (result.EnableSuccess) {
                                 window.location.href = result.RedirectUrl;
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            alert(textStatus);
-                            alert(errorThrown.toString());
-                            $("#preloader").hide();
-                            alert("fail");
                         }
                     });
                 }

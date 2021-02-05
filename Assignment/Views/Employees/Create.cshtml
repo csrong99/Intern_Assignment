@@ -31,11 +31,9 @@
                     htmlAttributes = new {
                         @class = "form-control required",
                         @id = "username",
-               onfocusout = "checkUserExists()"
            }
                 })
                 @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger", @id = "validateUsername" })
-                <span id="userExists"></span>
             </div>
         </div>
 
@@ -46,11 +44,9 @@
                     htmlAttributes = new {
                         @class = "form-control",
                  @id = "emp_id",
-                 onfocusout = "checkIDExists()"
            }
                 })
                 @Html.ValidationMessageFor(model => model.Employee_ID, "", new { @class = "text-danger", @id = "validateID" })
-                <span id="idExists"></span>
             </div>
         </div>
 
@@ -137,78 +133,80 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" onclick="checkUserExist()" />
+                <input type="submit" value="Create" class="btn btn-primary" onclick="checkUserExist()" role="button"/>
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", 
+    "Index",
+    null,
+    new { @class = "btn btn-secondary", role = "button" })
 </div>
 
 @section Scripts {
     <script type="text/javascript">
 
-        function checkUserExists() {
+        //function checkUserExists() {
 
-            if ($("#validateUsername").hasClass("field-validation-error")) {
-                $("#userExists").text("");
-                return null;
-            } else {
-                var username = $("#username").val();
-                $.ajax({
-                    type: "GET",
-                    url: 'IsUsernameAvailable',
-                    data: "username=" + username,
-                    contentType: 'json',
-                    contentType: 'application/json',
-                    success: function (result) {
-                        if (result == "False") {
-                            $("#userExists").text("Username " + username + " is not available");
-                            $("#userExists").css('color', "red");
-                            $("#validateUsername").showErrors = "Username " + username + " is not available";
-                        } else if (result == "True") {
-                            $("#userExists").text("Username " + username + " is available");
-                            $("#userExists").css('color', "green");
-                        }
-                    },
-                    failure: function (jqXHR, textStatus, errorThrown) {
-                        console.log("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText); // Display error message
-                    }
-                })
-            }
+        //    if ($("#validateUsername").hasClass("field-validation-error")) {
+        //        $("#userExists").text("");
+        //        return null;
+        //    } else {
+        //        var username = $("#username").val();
+        //        $.ajax({
+        //            type: "GET",
+        //            url: 'IsUsernameAvailable',
+        //            data: "username=" + username,
+        //            contentType: 'json',
+        //            contentType: 'application/json',
+        //            success: function (result) {
+        //                if (result == "False") {
+        //                    $("#userExists").text("Username " + username + " is not available");
+        //                    $("#userExists").css('color', "red");
+        //                    $("#validateUsername").showErrors = "Username " + username + " is not available";
+        //                } else if (result == "True") {
+        //                    $("#userExists").text("Username " + username + " is available");
+        //                    $("#userExists").css('color', "green");
+        //                }
+        //            },
+        //            failure: function (jqXHR, textStatus, errorThrown) {
+        //            }
+        //        })
+        //    }
 
-        }
+        //}
 
-        function checkIDExists() {
+        //function checkIDExists() {
 
-            if ($("#validateID").hasClass("field-validation-error")) {
-                $("#idExists").text("");
-                return null;
-            } else {
-                var emp_id = $("#emp_id").val();
-                $.ajax({
-                    type: "GET",
-                    url: 'IsIDExisted',
-                    data: "id=" + emp_id,
-                    contentType: 'json',
-                    contentType: 'application/json',
-                    success: function (result) {
-                        if (result == "False") {
-                            $("#idExists").text("Employee ID " + emp_id + " is available");
-                            $("#idExists").css('color', "green");
-                        } else if (result == "True") {
-                            $("#idExists").text("Employee ID " + emp_id + " existed or invalid");
-                            $("#idExists").css('color', "red");
-                        }
-                    },
-                    failure: function (jqXHR, textStatus, errorThrown) {
-                        console.log("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText); // Display error message
-                    }
-                })
-            }
+        //    if ($("#validateID").hasClass("field-validation-error")) {
+        //        $("#idExists").text("");
+        //        return;
+        //    } else {
+        //        var emp_id = $("#emp_id").val();
+        //        $.ajax({
+        //            type: "GET",
+        //            url: 'IsIDExisted',
+        //            data: "id=" + emp_id,
+        //            contentType: 'json',
+        //            contentType: 'application/json',
+        //            success: function (result) {
+        //                if (result == "False") {
+        //                    $("#idExists").text("Employee ID " + emp_id + " is available");
+        //                    $("#idExists").css('color', "green");
+        //                } else if (result == "True") {
+        //                    $("#idExists").text("Employee ID " + emp_id + " existed or invalid");
+        //                    $("#idExists").css('color', "red");
+        //                }
+        //            },
+        //            failure: function (jqXHR, textStatus, errorThrown) {
 
-        }
+        //            }
+        //        })
+        //    }
+        //}
+
     </script>
 }

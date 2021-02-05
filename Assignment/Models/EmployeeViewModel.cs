@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace Assignment.Models {
 	public static class EmployeeViewModel {
@@ -94,7 +95,7 @@ namespace Assignment.Models {
 
 		[NotMapped]
 		[DataType(DataType.Password)]
-		[Compare("Password", ErrorMessage = "Passwords did not match")]
+		[System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Passwords did not match")]
 		public string Confirm_Password { get; set; }
 
 		[DataType(DataType.Date)]
@@ -121,10 +122,12 @@ namespace Assignment.Models {
 		[MinLength(8)]
 		[MaxLength(15)]
 		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Username must be alphanumeric")]
+		[Remote("IsUsernameAvailable", "Employees", HttpMethod = "POST",ErrorMessage ="Username already exists")]
 		public string Username { get; set; }
 
 		[Range(1, 10, ErrorMessage = "Employee ID must be within 10 numbers")]
 		[Required(ErrorMessage = "Please fill-in employee ID")]
+		[Remote("IsIDAvailable", "Employees", HttpMethod = "POST", ErrorMessage = "Employee ID already exists")]
 		public int Employee_ID { get; set; }
 
 		[DataType(DataType.EmailAddress)]
@@ -146,7 +149,7 @@ namespace Assignment.Models {
 		[NotMapped]
 		[Required]
 		[DataType(DataType.Password)]
-		[Compare("Password", ErrorMessage = "Passwords did not match")]
+		[System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Passwords did not match")]
 		public string Confirm_Password { get; set; }
 
 		[DataType(DataType.Date)]

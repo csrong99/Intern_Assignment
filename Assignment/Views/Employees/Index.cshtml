@@ -1,14 +1,15 @@
-﻿@model IEnumerable<Assignment.Employee>
-
+﻿@model PagedList.IPagedList<Employee>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewBag.Title = "Index";
 }
 
-@Html.ActionLink("Logout", 
-    "Logout", 
-    controllerName: "Login", 
-    routeValues: null,  
-    htmlAttributes: new { role = "button", @class = "btn btn-danger"})
+@Html.ActionLink("Logout",
+    "Logout",
+    controllerName: "Login",
+    routeValues: null,
+    htmlAttributes: new { role = "button", @class = "btn btn-danger" })
 
 <h2>Index</h2>
 
@@ -19,6 +20,7 @@
     htmlAttributes: new { role = "button", @class = "btn btn-primary" }
     )
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -73,6 +75,9 @@
 
     <!-- Button trigger modal -->
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
