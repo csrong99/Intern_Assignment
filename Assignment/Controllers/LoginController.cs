@@ -30,6 +30,11 @@ namespace Assignment.Controllers {
 					Attempt_Time = DateTime.Now,
 					Ipv4 = ipv4,
 				};
+				
+				if(db.Ipv4Blacklist.Any(r => r.Ipv4.Equals(ipv4)))
+                {
+					return Json(new { EnableError = true, ErrorTitle = "Error", ErrorMsg = "Blacklisted IP Address. Please contact system admin." });
+				}
 
 				// Check if valid username
 				if (employee_logon != null) {

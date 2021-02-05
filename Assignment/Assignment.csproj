@@ -167,6 +167,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Ipv4Blacklist.cs">
+      <DependentUpon>MyCompanyModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Log.cs">
       <DependentUpon>MyCompanyModel.tt</DependentUpon>
     </Compile>

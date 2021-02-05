@@ -50,5 +50,11 @@ DEFAULT (0);
 DBCC CHECKIDENT ('Log', RESEED, 1)
 
 
+CREATE TABLE [dbo].[Ipv4Blacklist]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+    [Ipv4] NCHAR(20) NOT NULL
+)
+
 
 

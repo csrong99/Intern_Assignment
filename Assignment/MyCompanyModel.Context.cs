@@ -30,5 +30,6 @@ namespace Assignment
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<Ipv4Blacklist> Ipv4Blacklist { get; set; }
     }
 }

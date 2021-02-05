@@ -20,7 +20,7 @@ namespace Assignment
         {
             this.Logs = new HashSet<Log>();
         }
-    
+
         public string Username { get; set; }
         public int Employee_ID { get; set; }
         public string Email { get; set; }
@@ -33,7 +33,7 @@ namespace Assignment
         public string Security_Phrase { get; set; }
         public int Status { get; set; }
         public int Login_Attempts { get; set; }
-    
+
         public virtual Position Position1 { get; set; }
         public virtual Status Status1 { get; set; }
         public virtual Team Team1 { get; set; }

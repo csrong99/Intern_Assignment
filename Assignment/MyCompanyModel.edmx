@@ -21,6 +21,13 @@
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="Login_Attempts" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Ipv4Blacklist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ipv4" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="Log">
           <Key>
             <PropertyRef Name="Id" />
@@ -102,6 +109,7 @@
         </Association>
         <EntityContainer Name="MyCompanyModelStoreContainer">
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ipv4Blacklist" EntityType="Self.Ipv4Blacklist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
@@ -149,6 +157,7 @@
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Log" EntitySet="Logs" />
           </AssociationSet>
+          <EntitySet Name="Ipv4Blacklist" EntityType="MyCompanyModel.Ipv4Blacklist" />
         </EntityContainer>
         <EntityType Name="Employee">
           <Key>
@@ -253,6 +262,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Ipv4Blacklist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ipv4" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -308,6 +324,14 @@
               <MappingFragment StoreEntitySet="Team">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Team_ID" ColumnName="Team_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ipv4Blacklist">
+            <EntityTypeMapping TypeName="MyCompanyModel.Ipv4Blacklist">
+              <MappingFragment StoreEntitySet="Ipv4Blacklist">
+                <ScalarProperty Name="Ipv4" ColumnName="Ipv4" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
